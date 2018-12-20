@@ -16,7 +16,7 @@ def parse_arguments():
     return parser.parse_known_args()[0]
 
 
-def list():
+def list_keys():
     version = index.pop('version')
     it_print('version: {}'.format(version))
     it_print('data keys:')
@@ -26,7 +26,7 @@ def list():
 
 def main(args):
     if args.list:
-        list()
+        list_keys()
 
 
 if __name__ == '__main__':
