@@ -12,7 +12,7 @@ def main():
     version = index.pop('version')
     it_print('version: {}'.format(version))
     it_print('data keys:')
-    for key in index:
+    for key in sorted(index.keys()):
         it_print(key, indent=2)
 
 
