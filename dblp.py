@@ -15,9 +15,9 @@ from data import index, dblp_data_path, index_path
 
 def parse_arguments():
     parser = argparse.ArgumentParser('DBLP Papers Helper')
-    parser.add_argument('--subject', '-s', help='partial paper title')
-    parser.add_argument('--url', '-a', required=True, help='html address')
-    parser.add_argument('--reload', '-r', action='store_true', help='reload data from url')
+    parser.add_argument('-s', '--subject', help='partial paper title')
+    parser.add_argument('-a', '--url', required=True, help='html address')
+    parser.add_argument('-r', '--reload', action='store_true', help='reload data from url')
 
     _args, _ = parser.parse_known_args()
     return _args
