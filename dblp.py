@@ -24,7 +24,9 @@ def parse_arguments():
 
 
 def main(args):
-    regex_fmt = '<li class="entry inproceedings".*?<span class="title" itemprop="name">(.*?).</span>.*?</li>'
+    regex_fmt = '<li class="entry (?:inproceedings|article)".*?' \
+                '<span class="title" itemprop="name">(.*?).</span>' \
+                '.*?</li>'
     paper_entry_regex = re.compile(regex_fmt)
 
     if args.subject is None:
