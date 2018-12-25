@@ -14,6 +14,7 @@ create_if_not_exists(data_path)
 
 index_path = concat_path(data_path, 'index.json')
 cache_path = concat_path(data_path, '.cache')
+cache_size = 80
 dblp_data_path = concat_path(data_path, 'dblp')
 create_if_not_exists(dblp_data_path)
 

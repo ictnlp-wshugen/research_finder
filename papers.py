@@ -4,14 +4,16 @@
 # email: wangshugen@ict.ac.cn
 # date: 2018-12-20 11:10
 import argparse
+from typing import Iterable
 
 from easy_tornado.functional import timed
 from easy_tornado.utils.file_operation import write_json_contents
 from easy_tornado.utils.logging import it_print
+from easy_tornado.utils.time_extension import current_datetime
 
 from core import filter_keys
 from core import filter_paper_titles
-from data import index, cache, cache_path
+from data import index, cache_path, cache_size, cache
 
 
 def parse_arguments():
@@ -45,7 +47,7 @@ def list_keys(args):
         it_print(_key, indent=2)
 
 
-def query(args):
+def cached_query(args):
     c_key = '{sub_key}.{subject}'.format(**{
         'sub_key': 'all' if args.all else args.sub_key,
         'subject': args.subject
@@ -66,9 +68,24 @@ def query(args):
             paper_titles.extend(part)
         paper_titles = list(set(paper_titles))
 
+        # LILO
+        c_keys = list(cache.keys())
+        if len(c_keys) >= cache_size:
+            tmp = dict()
+            for k, v in cache.items():
+                if not isinstance(v, Iterable):
+                    continue
+                if 'time' not in v:
+                    continue
+                tmp[v['time']] = k
+            removed = sorted(tmp.values())[cache_size - 1:]
+            for k in removed:
+                if k in cache:
+                    cache.pop(k)
         cache[c_key] = {
             'paper_titles': paper_titles,
-            'total': total
+            'total': total,
+            'time': current_datetime()
         }
         write_json_contents(cache_path, cache)
     else:
@@ -88,7 +105,7 @@ def main(args):
     if args.list_keys:
         list_keys(args)
     elif args.query:
-        query(args)
+        cached_query(args)
 
 
 if __name__ == '__main__':
