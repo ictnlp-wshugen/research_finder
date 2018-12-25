@@ -6,7 +6,10 @@
 import argparse
 import re
 
-from easy_tornado.utils.file_operation import load_file_contents, write_file_contents, concat_path, write_json_contents
+from easy_tornado.utils.file_operation import concat_path
+from easy_tornado.utils.file_operation import load_file_contents
+from easy_tornado.utils.file_operation import write_file_contents
+from easy_tornado.utils.file_operation import write_json_contents
 from easy_tornado.utils.logging import it_print
 from easy_tornado.utils.web_extension import request
 
