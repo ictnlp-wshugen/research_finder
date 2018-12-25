@@ -34,7 +34,8 @@ def parse_arguments():
     q.add_argument('-a', '--all', action='store_true', default=False,
                    help='search all items, if --all is enabled, then --sub-key takes no effect')
     q.add_argument('-s', '--subject', help='partial paper title')
-    q.add_argument('-f', '--force', help='force to query, do not use cache')
+    q.add_argument('-f', '--force', action='store_true', default=False,
+                   help='force to query, do not use cache')
 
     return parser.parse_known_args()[0]
 
@@ -52,7 +53,7 @@ def cached_query(args):
         'sub_key': 'all' if args.all else args.sub_key,
         'subject': args.subject
     })
-    if c_key not in cache:
+    if c_key not in cache or args.force:
         if not args.all:
             filtered = filter_keys(index, args.sub_key)
         else:
