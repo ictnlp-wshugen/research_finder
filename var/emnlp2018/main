@@ -1,0 +1,33 @@
+ 1: Addressing Troublesome Words in Neural Machine Translation
+ 2: Top-down Tree Structured Decoding with Syntactic Connections for Neural Machine Translation and Parsing
+ 3: Contextual Parameter Generation for Universal Neural Machine Translation
+ 4: Back-Translation Sampling by Targeting Difficult Words in Neural Machine Translation
+ 5: Multi-Domain Neural Machine Translation with Word-Level Domain Context Discrimination
+ 6: Semi-Autoregressive Neural Machine Translation
+ 7: Adaptive Multi-pass Decoder for Neural Machine Translation
+ 8: SwitchOut: an Efficient Data Augmentation Algorithm for Neural Machine Translation
+ 9: Rapid Adaptation of Neural Machine Translation to New Languages
+10: Compact Personalized Models for Neural Machine Translation
+11: The Lazy Encoder: A Fine-Grained Analysis of the Role of Morphology in Neural Machine Translation
+12: Document-Level Neural Machine Translation with Hierarchical Attention Networks
+13: Multi-Source Syntactic Neural Machine Translation
+14: Learning When to Concentrate or Divert Attention: Self-Adaptive Attention Temperature for Neural Machine Translation
+15: Accelerating Asynchronous Stochastic Gradient Descent for Neural Machine Translation
+16: Towards Two-Dimensional Sequence to Sequence Model in Neural Machine Translation
+17: End-to-End Non-Autoregressive Neural Machine Translation with Connectionist Temporal Classification
+18: Prediction Improves Simultaneous Neural Machine Translation
+19: Training Deeper Neural Machine Translation Models with Transparent Attention
+20: Context and Copying in Neural Machine Translation
+21: Encoding Gated Translation Memory into Neural Machine Translation
+22: Breaking the Beam Search Curse: A Study of (Re-)Scoring Methods and Stopping Criteria for Neural Machine Translation
+23: Beyond Error Propagation in Neural Machine Translation: Characteristics of Language Also Matter
+24: A Study of Reinforcement Learning for Neural Machine Translation
+25: Meta-Learning for Low-Resource Neural Machine Translation
+26: Exploiting Deep Representations for Neural Machine Translation
+27: Why Self-Attention? A Targeted Evaluation of Neural Machine Translation Architectures
+28: Simplifying Neural Machine Translation with Addition-Subtraction Twin-Gated Recurrent Networks
+29: Speeding Up Neural Machine Translation Decoding by Cube Pruning
+30: Revisiting Character-Based Neural Machine Translation with Capacity and Compression
+31: A Tree-based Decoder for Neural Machine Translation
+32: Greedy Search with Probabilistic N-gram Matching for Neural Machine Translation
+33: Exploring Recombination for Efficient Decoding of Neural Machine Translation
