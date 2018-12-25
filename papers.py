@@ -49,8 +49,10 @@ def query(args):
         filtered = index.keys()
 
     paper_titles = []
+    total = 0
     for key in filtered:
-        part = filter_paper_titles(index[key], args.subject)
+        part, num = filter_paper_titles(index[key], args.subject)
+        total += num
         if args.verbose:
             it_print('{:2} => {}'.format(len(part), key))
         paper_titles.extend(part)
@@ -58,6 +60,7 @@ def query(args):
 
     for i, item in enumerate(paper_titles):
         it_print('{:2}: {}'.format(i + 1, item))
+    it_print('{} papers total'.format(total))
 
 
 def main(args):

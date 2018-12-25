@@ -41,7 +41,7 @@ def main(args):
         index[key] = save_path
         write_json_contents(index_path, index)
 
-    filtered = filter_paper_titles(index[key], subject)
+    filtered, _ = filter_paper_titles(index[key], subject)
     for i, item in enumerate(filtered):
         it_print('{:2}: {}'.format(i + 1, item))
 

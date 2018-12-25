@@ -11,7 +11,7 @@ from six import string_types
 
 def filter_paper_titles(file_path, subject):
     if not isinstance(file_path, string_types) or not file_exists(file_path):
-        return []
+        return [], 0
 
     regex_fmt = '<li class="entry (?:inproceedings|article|informal)".*?' \
                 '<span class="title" itemprop="name">(.*?).</span>' \
@@ -28,7 +28,7 @@ def filter_paper_titles(file_path, subject):
     for paper_title in paper_titles:
         if paper_title.find(subject) != -1:
             filtered.append(paper_title)
-    return filtered
+    return filtered, len(paper_titles)
 
 
 def filter_keys(key_holder, sub_key):
