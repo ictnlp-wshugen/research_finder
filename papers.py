@@ -43,9 +43,6 @@ def list_keys(args):
 
 
 def query(args):
-    version = index.pop('version')
-    it_print('version: {}'.format(version))
-
     if not args.all:
         filtered = filter_keys(index, args.sub_key)
     else:
