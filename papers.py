@@ -13,20 +13,23 @@ from data import index
 def parse_arguments():
     parser = argparse.ArgumentParser('Papers console')
     parser.add_argument('-l', '--list', action='store_true', help='list data')
+    parser.add_argument('-k', '--key', help='key item')
     return parser.parse_known_args()[0]
 
 
-def list_keys():
+def list_keys(key=None):
     version = index.pop('version')
     it_print('version: {}'.format(version))
     it_print('data keys:')
-    for key in sorted(index.keys()):
-        it_print(key, indent=2)
+    for _key in sorted(index.keys()):
+        if not (key is None or _key.find(key) != -1):
+            continue
+        it_print(_key, indent=2)
 
 
 def main(args):
     if args.list:
-        list_keys()
+        list_keys(args.key)
 
 
 if __name__ == '__main__':
