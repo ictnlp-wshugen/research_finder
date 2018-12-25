@@ -34,7 +34,7 @@ def filter_paper_titles(file_path, subject):
 def filter_keys(key_holder, sub_key):
     filtered = []
     for _key in sorted(key_holder.keys()):
-        if not (sub_key is None or _key.find(sub_key.lower()) != -1):
+        if not (sub_key is None or _key.find(sub_key) != -1):
             continue
         filtered.append(_key)
     return filtered
