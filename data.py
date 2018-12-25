@@ -13,12 +13,22 @@ data_path = './data'
 create_if_not_exists(data_path)
 
 index_path = concat_path(data_path, 'index.json')
+cache_path = concat_path(data_path, '.cache')
 dblp_data_path = concat_path(data_path, 'dblp')
 create_if_not_exists(dblp_data_path)
 
+# initialize and load index
 if not file_exists(index_path):
     data = {
         'version': 0.1
     }
     write_json_contents(index_path, data)
 index = parse_json(load_file_contents(index_path, pieces=False))
+
+# initialize and load cache
+if not file_exists(cache_path):
+    data = {
+        'version': 0.1
+    }
+    write_json_contents(cache_path, data)
+cache = parse_json(load_file_contents(cache_path, pieces=False))
