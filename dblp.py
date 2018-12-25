@@ -17,9 +17,10 @@ from data import index, dblp_data_path, index_path
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser('DBLP Papers Helper')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('data', help='url to retrieve data and as key')
     parser.add_argument('-s', '--subject', help='partial paper title')
-    parser.add_argument('-a', '--url', required=True, help='html address')
+    parser.add_argument('-a', '--all', action='store_true', help='search all items')
     parser.add_argument('-r', '--reload', action='store_true', help='reload data from url')
 
     _args, _ = parser.parse_known_args()
@@ -37,17 +38,17 @@ def main(args):
     else:
         subject = args.subject
 
-    key = args.url
+    key = args.data
     if key not in index or args.reload:
         file_name = key[key.rfind('/') + 1:]
         save_path = concat_path(dblp_data_path, file_name)
 
-        contents = request(args.url)
+        contents = request(key)
         write_file_contents(save_path, contents)
 
         index[key] = save_path
         write_json_contents(index_path, index)
-    contents = load_file_contents(index[args.url], pieces=False)
+    contents = load_file_contents(index[key], pieces=False)
     contents = contents.decode('utf-8')
 
     paper_titles = paper_entry_regex.findall(contents)

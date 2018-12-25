@@ -12,8 +12,8 @@ from data import index
 
 def parse_arguments():
     parser = argparse.ArgumentParser('Papers console')
-    parser.add_argument('-l', '--list', action='store_true', help='list data')
-    parser.add_argument('-k', '--key', help='key item')
+    parser.add_argument('-l', '--list', action='store_true', help='list all keys')
+    parser.add_argument('-sk', '--sub-key', help='a part of key')
     return parser.parse_known_args()[0]
 
 
@@ -28,6 +28,7 @@ def list_keys(key=None):
 
 
 def main(args):
+    print(args)
     if args.list:
         list_keys(args.key)
 
