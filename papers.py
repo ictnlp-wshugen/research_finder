@@ -26,6 +26,8 @@ def parse_arguments():
                            help='list all keys')
     exclusive.add_argument('-q', '--query', action='store_true', default=False,
                            help='activate query option')
+    exclusive.add_argument('-c', '--cached', action='store_true', default=False,
+                           help='list cached keys')
 
     parser.add_argument('-sk', '--sub-key', help='search all items')
 
@@ -108,6 +110,14 @@ def cached_query(args):
         it_print('{:2}: {}'.format(i + 1, item), indent=2)
 
 
+def cached_keys(args):
+    version = cache.pop('version')
+    it_print('version: {}'.format(version))
+    it_print('cached keys:')
+    for _key in sorted(cache.keys()):
+        it_print(_key, indent=2)
+
+
 def main(args):
     if args.subject is None:
         args.subject = 'Neural Machine Translation'
@@ -120,6 +130,8 @@ def main(args):
         list_keys(args)
     elif args.query:
         cached_query(args)
+    elif args.cached:
+        cached_keys(args)
 
 
 if __name__ == '__main__':
