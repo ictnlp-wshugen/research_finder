@@ -6,7 +6,6 @@
 import argparse
 from typing import Iterable
 
-from easy_tornado.functional import timed
 from easy_tornado.utils.file_operation import write_json_contents
 from easy_tornado.utils.logging import it_print
 from easy_tornado.utils.time_extension import current_datetime
@@ -54,6 +53,11 @@ def cached_query(args):
         'subject': args.subject.lower()
     })
     if c_key not in cache or args.force:
+        if c_key in cache:
+            last = cache[c_key]['time']
+        else:
+            last = None
+
         if not args.all:
             filtered = filter_keys(index, args.sub_key)
         else:
@@ -69,7 +73,7 @@ def cached_query(args):
             paper_titles.extend(part)
         paper_titles = list(set(paper_titles))
 
-        # LILO
+        # LRU
         c_keys = list(cache.keys())
         if len(c_keys) >= cache_size:
             tmp = dict()
@@ -88,17 +92,22 @@ def cached_query(args):
             'total': total,
             'time': current_datetime()
         }
-        write_json_contents(cache_path, cache)
     else:
         v = cache[c_key]
-        paper_titles, total = v['paper_titles'], v['total']
+        paper_titles, total, last = v['paper_titles'], v['total'], v['time']
+        v['time'] = current_datetime()
+    write_json_contents(cache_path, cache)
 
+    it_print('total {} papers'.format(total))
+    it_print('last accessed: {}'.format(last))
+    if len(paper_titles) > 0:
+        it_print('papers:')
+    else:
+        it_print('no paper is found')
     for i, item in enumerate(paper_titles):
-        it_print('{:2}: {}'.format(i + 1, item))
-    it_print('{} papers total'.format(total))
+        it_print('{:2}: {}'.format(i + 1, item), indent=2)
 
 
-@timed
 def main(args):
     if args.subject is None:
         args.subject = 'Neural Machine Translation'
