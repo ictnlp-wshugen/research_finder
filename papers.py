@@ -38,6 +38,9 @@ def parse_arguments():
     q.add_argument('-f', '--force', action='store_true', default=False,
                    help='force to query, do not use cache')
 
+    c = exclusive.add_argument_group('manipulate cache keys')
+    c.add_argument('-d', '--delete', help='delete cached item')
+
     return parser.parse_known_args()[0]
 
 
@@ -110,7 +113,13 @@ def cached_query(args):
         it_print('{:2}: {}'.format(i + 1, item), indent=2)
 
 
-def cached_keys(args):
+def manage_cache(args):
+    if args.delete is not None:
+        c_key = args.delete
+        if c_key in cache:
+            cache.pop(c_key)
+            write_json_contents(cache_path, cache)
+
     version = cache.pop('version')
     it_print('version: {}'.format(version))
     it_print('cached keys:')
@@ -131,7 +140,7 @@ def main(args):
     elif args.query:
         cached_query(args)
     elif args.cached:
-        cached_keys(args)
+        manage_cache(args)
 
 
 if __name__ == '__main__':
