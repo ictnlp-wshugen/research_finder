@@ -26,7 +26,7 @@ def filter_paper_titles(file_path, subject):
     paper_titles = paper_entry_regex.findall(contents)
     filtered = []
     for paper_title in paper_titles:
-        if paper_title.lower().find(subject) != -1:
+        if subject is None or paper_title.lower().find(subject) != -1:
             filtered.append(paper_title)
     return filtered, len(paper_titles)
 

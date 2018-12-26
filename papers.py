@@ -55,7 +55,7 @@ def list_keys(args):
 def cached_query(args):
     c_key = '{sub_key}.{subject}'.format(**{
         'sub_key': 'All' if args.all else args.sub_key,
-        'subject': args.subject.lower()
+        'subject': args.subject
     })
     if c_key not in cache or args.force:
         if c_key in cache:
@@ -128,9 +128,8 @@ def manage_cache(args):
 
 
 def main(args):
-    if args.subject is None:
-        args.subject = 'Neural Machine Translation'
-    args.subject = args.subject.lower()
+    if args.subject is not None:
+        args.subject = args.subject.lower()
 
     if args.sub_key is None:
         args.all = True
