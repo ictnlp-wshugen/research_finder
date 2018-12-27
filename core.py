@@ -51,15 +51,15 @@ def filter_paper_titles(file_path, subject, exclude_subject, logic_and=True):
 
     filtered = []
     for paper_title in paper_titles:
-        paper_title = paper_title.lower()
+        y = paper_title.lower()
         if logic_and:
-            criterion = all([paper_title.find(x) != -1 for x in subject])
+            criterion = all([y.find(x) != -1 for x in subject])
         else:
-            criterion = any([paper_title.find(x) != -1 for x in subject])
+            criterion = any([y.find(x) != -1 for x in subject])
         if not criterion:
             continue
 
-        if exclude_subject is None or not any([paper_title.find(x) != -1 for x in exclude_subject]):
+        if exclude_subject is None or not any([y.find(x) != -1 for x in exclude_subject]):
             filtered.append(paper_title)
     return filtered, len(paper_titles)
 
