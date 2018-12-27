@@ -4,29 +4,62 @@
 # date: 2018-12-25 15:23
 import re
 
-from easy_tornado.utils.file_operation import file_exists
+from easy_tornado.utils.file_operation import file_exists, write_json_contents
 from easy_tornado.utils.file_operation import load_file_contents
+from easy_tornado.utils.str_extension import parse_json
 from six import string_types
 
+dblp_regex_fmt = '<li class="entry (?:inproceedings|article|informal)".*?' \
+                 '<span class="title" itemprop="name">(.*?).</span>' \
+                 '.*?</li>'
+dblp_paper_regex = re.compile(dblp_regex_fmt)
 
-def filter_paper_titles(file_path, subject):
+
+def build_paper_titles(paper_cache_path, *data_paths, **kwargs):
+    source = kwargs.pop('source', None)
+    if source is None or source != 'dblp':
+        return
+    paper_cache = []
+    if file_exists(paper_cache_path):
+        paper_cache = parse_json(load_file_contents(paper_cache_path, pieces=False))
+
+    for data_path in data_paths:
+        contents = load_file_contents(data_path, pieces=False)
+        try:
+            contents = contents.decode('utf-8')
+        except (UnicodeDecodeError, AttributeError):
+            pass
+        paper_titles = dblp_paper_regex.findall(contents)
+        paper_cache.extend(paper_titles)
+    paper_cache = list(set(paper_cache))
+    write_json_contents(paper_cache_path, paper_cache)
+
+
+def filter_paper_titles(file_path, subject, exclude_subject, logic_and=True):
     if not isinstance(file_path, string_types) or not file_exists(file_path):
         return [], 0
 
-    regex_fmt = '<li class="entry (?:inproceedings|article|informal)".*?' \
-                '<span class="title" itemprop="name">(.*?).</span>' \
-                '.*?</li>'
-    paper_entry_regex = re.compile(regex_fmt)
     contents = load_file_contents(file_path, pieces=False)
     try:
         contents = contents.decode('utf-8')
     except UnicodeDecodeError:
         pass
 
-    paper_titles = paper_entry_regex.findall(contents)
+    paper_titles = dblp_paper_regex.findall(contents)
+    if subject is None and exclude_subject is None:
+        return paper_titles, len(paper_titles)
+
     filtered = []
     for paper_title in paper_titles:
-        if subject is None or paper_title.lower().find(subject) != -1:
+        paper_title = paper_title.lower()
+        if logic_and:
+            criterion = all([paper_title.find(x) != -1 for x in subject])
+        else:
+            criterion = any([paper_title.find(x) != -1 for x in subject])
+        if not criterion:
+            continue
+
+        if exclude_subject is None or not any([paper_title.find(x) != -1 for x in exclude_subject]):
             filtered.append(paper_title)
     return filtered, len(paper_titles)
 

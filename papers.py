@@ -12,7 +12,7 @@ from easy_tornado.utils.time_extension import current_datetime
 
 from core import filter_keys
 from core import filter_paper_titles
-from data import index, cache_path, cache_size, cache
+from data import index, cache_size, query_cache, query_cache_path
 
 
 def parse_arguments():
@@ -34,11 +34,14 @@ def parse_arguments():
     q = exclusive.add_argument_group('query paper titles')
     q.add_argument('-a', '--all', action='store_true', default=False,
                    help='search all items, if --all is enabled, then --sub-key takes no effect')
-    q.add_argument('-s', '--subject', help='partial paper title')
+    q.add_argument('-s', '--subject', nargs='+', help='partial paper title(s)')
+    q.add_argument('-es', '--exclude-subject', nargs='+', help='exclude partial paper title(s)')
+    q.add_argument('-m', '--mode', choices=['and', 'or'], default='and',
+                   help='criterion logic')
     q.add_argument('-f', '--force', action='store_true', default=False,
-                   help='force to query, do not use cache')
+                   help='force to query, do not use query_cache')
 
-    c = exclusive.add_argument_group('manipulate cache keys')
+    c = exclusive.add_argument_group('manipulate query_cache keys')
     c.add_argument('-d', '--delete', help='delete cached item')
 
     return parser.parse_known_args()[0]
@@ -47,19 +50,23 @@ def parse_arguments():
 def list_keys(args):
     version = index.pop('version')
     it_print('version: {}'.format(version))
-    it_print('data keys:')
-    for _key in filter_keys(index, args.sub_key):
-        it_print(_key, indent=2)
+    keys = filter_keys(index, args.sub_key)
+    if len(keys) > 0:
+        it_print('data keys:')
+        for key in keys:
+            it_print(key, indent=2)
 
 
 def cached_query(args):
-    c_key = '{sub_key}.{subject}'.format(**{
+    c_key = '{sub_key}.{mode}+{subject}-{exclude_subject}'.format(**{
         'sub_key': 'All' if args.all else args.sub_key,
-        'subject': args.subject
+        'mode': args.mode,
+        'subject': '/'.join(args.subject) if args.subject is not None else 'All',
+        'exclude_subject': '/'.join(args.exclude_subject) if args.exclude_subject is not None else 'None'
     })
-    if c_key not in cache or args.force:
-        if c_key in cache:
-            last = cache[c_key]['time']
+    if c_key not in query_cache or args.force:
+        if c_key in query_cache:
+            last = query_cache[c_key]['time']
         else:
             last = None
 
@@ -71,7 +78,8 @@ def cached_query(args):
         paper_titles = []
         total = 0
         for key in filtered:
-            part, num = filter_paper_titles(index[key], args.subject)
+            part, num = filter_paper_titles(index[key], args.subject, args.exclude_subject,
+                                            logic_and=args.mode == 'and')
             total += num
             if args.verbose:
                 it_print('{:2} => {}'.format(len(part), key))
@@ -79,10 +87,10 @@ def cached_query(args):
         paper_titles = list(set(paper_titles))
 
         # LRU
-        c_keys = list(cache.keys())
+        c_keys = list(query_cache.keys())
         if len(c_keys) >= cache_size:
             tmp = dict()
-            for k, v in cache.items():
+            for k, v in query_cache.items():
                 if not isinstance(v, Iterable):
                     continue
                 if 'time' not in v:
@@ -90,18 +98,18 @@ def cached_query(args):
                 tmp[v['time']] = k
             removed = sorted(tmp.values())[cache_size - 1:]
             for k in removed:
-                if k in cache:
-                    cache.pop(k)
-        cache[c_key] = {
+                if k in query_cache:
+                    query_cache.pop(k)
+        query_cache[c_key] = {
             'paper_titles': paper_titles,
             'total': total,
             'time': current_datetime()
         }
     else:
-        v = cache[c_key]
+        v = query_cache[c_key]
         paper_titles, total, last = v['paper_titles'], v['total'], v['time']
         v['time'] = current_datetime()
-    write_json_contents(cache_path, cache)
+    write_json_contents(query_cache_path, query_cache)
 
     it_print('total {} papers'.format(total))
     it_print('last accessed: {}'.format(last))
@@ -116,21 +124,26 @@ def cached_query(args):
 def manage_cache(args):
     if args.delete is not None:
         c_key = args.delete
-        if c_key in cache:
-            cache.pop(c_key)
-            write_json_contents(cache_path, cache)
+        if c_key in query_cache:
+            query_cache.pop(c_key)
+            write_json_contents(query_cache_path, query_cache)
 
-    version = cache.pop('version')
+    version = query_cache.pop('version')
     it_print('version: {}'.format(version))
-    it_print('cached keys:')
-    for _key in sorted(cache.keys()):
-        it_print(_key, indent=2)
+    keys = sorted(query_cache.keys())
+    if len(keys) > 0:
+        it_print('cached keys:')
+        for _key in keys:
+            it_print(_key, indent=2)
 
 
 def main(args):
     if args.subject is not None:
-        args.subject = args.subject.lower()
-
+        for i, subject in enumerate(args.subject):
+            args.subject[i] = subject.lower()
+    if args.exclude_subject is not None:
+        for i, subject in enumerate(args.exclude_subject):
+            args.exclude_subject[i] = subject.lower()
     if args.sub_key is None:
         args.all = True
 
