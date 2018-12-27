@@ -127,7 +127,7 @@ def cached_query(args):
     else:
         it_print('no paper is found')
     for i, item in enumerate(paper_titles):
-        it_print('{:2}: {}'.format(i + 1, item), indent=2)
+        it_print('{}: {}'.format(i + 1, item), indent=2)
 
 
 def manage_cache(args):

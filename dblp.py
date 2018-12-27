@@ -56,7 +56,7 @@ def main(args):
 
     filtered, _ = filter_paper_titles(paper_cache['values'][key], args.subject)
     for i, item in enumerate(filtered):
-        it_print('{:2}: {}'.format(i + 1, item))
+        it_print('{}: {}'.format(i + 1, item))
 
 
 if __name__ == '__main__':
