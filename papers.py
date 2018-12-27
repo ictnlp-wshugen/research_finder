@@ -12,7 +12,11 @@ from easy_tornado.utils.time_extension import current_datetime
 
 from core import filter_keys
 from core import filter_paper_titles
-from data import index, cache_size, query_cache, query_cache_path
+from data import cache_size
+from data import index
+from data import paper_cache
+from data import query_cache
+from data import query_cache_path
 
 
 def parse_arguments():
@@ -77,8 +81,13 @@ def cached_query(args):
 
         paper_titles = []
         total = 0
+        cached_paper_titles = paper_cache['values']
         for key in filtered:
-            part, num = filter_paper_titles(index[key], args.subject, args.exclude_subject,
+            if key not in cached_paper_titles:
+                continue
+            titles_holder = cached_paper_titles[key]
+            part, num = filter_paper_titles(titles_holder,
+                                            args.subject, args.exclude_subject,
                                             logic_and=args.mode == 'and')
             total += num
             if args.verbose:
