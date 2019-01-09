@@ -8,6 +8,7 @@ from easy_tornado.utils.file_operation import create_if_not_exists
 from easy_tornado.utils.file_operation import file_exists
 from easy_tornado.utils.file_operation import load_file_contents
 from easy_tornado.utils.file_operation import write_json_contents
+from easy_tornado.utils.logging import it_print
 from easy_tornado.utils.str_extension import parse_json
 from easy_tornado.utils.time_extension import current_datetime
 from six import string_types
@@ -38,6 +39,7 @@ index = parse_json(load_file_contents(index_path, pieces=False))
 
 # initialize and load paper_cache
 if not file_exists(paper_cache_path):
+    it_print('building papers cache ...')
     data = {
         'version': 0.1,
         'build_time': current_datetime(),
