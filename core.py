@@ -42,7 +42,7 @@ def filter_paper_titles(paper_titles, subject=None, exclude_subject=None, logic_
 
         if exclude_subject is None or not any([y.find(x) != -1 for x in exclude_subject]):
             filtered.append(paper_title)
-    return filtered, len(paper_titles)
+    return filtered, len(filtered)
 
 
 def filter_keys(key_holder, sub_key):

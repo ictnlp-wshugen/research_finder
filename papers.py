@@ -87,14 +87,15 @@ def cached_query(args):
             if key not in cached_paper_titles:
                 continue
             titles_holder = cached_paper_titles[key]
-            part, num = filter_paper_titles(titles_holder,
-                                            args.subject, args.exclude_subject,
-                                            logic_and=args.mode == 'and')
+            part, num = filter_paper_titles(
+                titles_holder, args.subject, args.exclude_subject,
+                logic_and=args.mode == 'and'
+            )
             total += num
             if args.verbose:
                 it_print('{:2} => {}'.format(len(part), key))
-            paper_titles.extend(part)
-        paper_titles = list(set(paper_titles))
+            if len(part) > 0:
+                paper_titles.append({'key': key, 'titles': part})
 
         # LRU
         c_keys = list(query_cache.keys())
@@ -123,12 +124,15 @@ def cached_query(args):
 
     it_print('total {} papers'.format(total))
     it_print('last accessed: {}'.format(last))
-    if len(paper_titles) > 0:
-        it_print('papers:')
-    else:
+    if not len(paper_titles) > 0:
         it_print('no paper is found')
-    for i, item in enumerate(paper_titles):
-        it_print('{}: {}'.format(i + 1, item), indent=2)
+        return
+
+    it_print('papers:')
+    for i, item in enumerate(paper_titles, start=1):
+        it_print('{}: {}'.format(i, item['key']), indent=2)
+        for title in item['titles']:
+            it_print(title, indent=4)
 
 
 def manage_cache(args):
