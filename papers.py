@@ -130,9 +130,9 @@ def cached_query(args):
 
     it_print('papers:')
     for i, item in enumerate(paper_titles, start=1):
-        it_print('{}: {}'.format(i, item['key']), indent=2)
-        for title in item['titles']:
-            it_print(title, indent=4)
+        it_print('({}) {}'.format(i, item['key']), indent=2)
+        for j, title in enumerate(item['titles'], start=1):
+            it_print('{}: {}'.format(j, title), indent=4)
 
 
 def manage_cache(args):
