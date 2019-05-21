@@ -5,6 +5,7 @@
 # date: 2018-12-20 09:59
 import argparse
 
+from easy_tornado.compat import python3
 from easy_tornado.utils.file_operation import concat_path
 from easy_tornado.utils.file_operation import write_file_contents
 from easy_tornado.utils.file_operation import write_json_contents
@@ -41,6 +42,8 @@ def main(args):
 
         # save data
         contents = request(key)
+        if python3 and isinstance(contents, bytes):
+            contents = str(contents, encoding='utf-8')
         write_file_contents(save_path, contents)
 
         # update index
@@ -48,7 +51,7 @@ def main(args):
         write_json_contents(index_path, index)
 
         # update cache
-        if key in paper_cache['values']:
+        if key not in paper_cache['values']:
             paper_cache['values'][key] = retrieve_paper_titles(index[key], **{
                 'source': 'dblp'
             })
