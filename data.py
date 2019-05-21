@@ -2,6 +2,7 @@
 # author: 王树根
 # email: wangshugen@ict.ac.cn
 # date: 2018-12-20 10:50
+from collections import OrderedDict
 
 from easy_tornado.utils.file_operation import concat_path
 from easy_tornado.utils.file_operation import create_if_not_exists
@@ -36,6 +37,7 @@ if not file_exists(index_path):
     }
     write_json_contents(index_path, data)
 index = parse_json(load_file_contents(index_path, pieces=False))
+index = OrderedDict(index)
 
 # initialize and load paper_cache
 if not file_exists(paper_cache_path):

@@ -10,6 +10,7 @@ from easy_tornado.utils.file_operation import concat_path
 from easy_tornado.utils.file_operation import write_file_contents
 from easy_tornado.utils.file_operation import write_json_contents
 from easy_tornado.utils.logging import it_print
+from easy_tornado.utils.str_extension import to_json
 from easy_tornado.utils.web_extension import request
 
 from core import filter_paper_titles
@@ -48,7 +49,8 @@ def main(args):
 
         # update index
         index[key] = save_path
-        write_json_contents(index_path, index)
+        index_data = to_json(index, indent=2)
+        write_file_contents(index_path, index_data)
 
         # update cache
         if key not in paper_cache['values']:
