@@ -122,17 +122,20 @@ def cached_query(args):
         v['time'] = current_datetime()
     write_json_contents(query_cache_path, query_cache)
 
+    if last is not None:
+        it_print('last accessed: {}'.format(last))
     it_print('total {} papers'.format(total))
-    it_print('last accessed: {}'.format(last))
     if not len(paper_titles) > 0:
         it_print('no paper is found')
         return
 
-    it_print('papers:')
+    it_print('paper search result:')
     for i, item in enumerate(paper_titles, start=1):
-        it_print('({}) {}'.format(i, item['key']), indent=2)
-        for j, title in enumerate(item['titles'], start=1):
+        key, titles = item['key'], item['titles']
+        it_print('({}) {} -> {}'.format(i, key, len(titles)), indent=2)
+        for j, title in enumerate(titles, start=1):
             it_print('{}: {}'.format(j, title), indent=4)
+    it_print('total {} papers'.format(total))
 
 
 def manage_cache(args):
