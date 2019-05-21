@@ -48,7 +48,7 @@ def filter_paper_titles(paper_titles, subject=None, exclude_subject=None, logic_
 def filter_keys(key_holder, sub_key):
     filtered = []
     for _key in sorted(key_holder.keys()):
-        if not (sub_key is None or _key.find(sub_key) != -1):
+        if sub_key is None or _key.find(sub_key) == -1:
             continue
         filtered.append(_key)
     return filtered

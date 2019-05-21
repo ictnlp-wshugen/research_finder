@@ -4,6 +4,7 @@
 # email: wangshugen@ict.ac.cn
 # date: 2018-12-20 11:10
 import argparse
+import sys
 from typing import Iterable
 
 from easy_tornado.utils.file_operation import write_json_contents
@@ -165,4 +166,8 @@ def main(args):
 
 
 if __name__ == '__main__':
+    cmd_str = ' '.join(sys.argv[1:])
+    if '\'' in cmd_str:
+        it_print('please use double quote instead of quote.')
+        exit(0)
     main(parse_arguments())
