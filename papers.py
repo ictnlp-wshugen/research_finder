@@ -7,9 +7,9 @@ import argparse
 import sys
 from typing import Iterable
 
-from easy_tornado.utils.file_operation import write_json_contents
-from easy_tornado.utils.logging import it_print
-from easy_tornado.utils.time_extension import current_datetime
+from easy_tornado import it_print
+from easy_tornado.utils import current_datetime
+from easy_tornado.utils import write_json_contents
 
 from core import filter_keys
 from core import filter_paper_titles

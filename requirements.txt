@@ -1,2 +1,2 @@
 six
-easy_tornado>=0.5.1
+easy_tornado>=0.6

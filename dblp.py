@@ -5,13 +5,13 @@
 # date: 2018-12-20 09:59
 import argparse
 
+from easy_tornado import it_print
 from easy_tornado.compat import python3
-from easy_tornado.utils.file_operation import concat_path
-from easy_tornado.utils.file_operation import write_file_contents
-from easy_tornado.utils.file_operation import write_json_contents
-from easy_tornado.utils.logging import it_print
-from easy_tornado.utils.str_extension import to_json
-from easy_tornado.utils.web_extension import request
+from easy_tornado.utils import concat_path
+from easy_tornado.utils import request
+from easy_tornado.utils import to_json
+from easy_tornado.utils import write_file_contents
+from easy_tornado.utils import write_json_contents
 
 from core import filter_paper_titles
 from core import retrieve_paper_titles

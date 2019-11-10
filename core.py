@@ -4,7 +4,7 @@
 # date: 2018-12-25 15:23
 import re
 
-from easy_tornado.utils.file_operation import load_file_contents
+from easy_tornado.utils import load_file_contents
 
 dblp_regex_fmt = '<li class="entry (?:inproceedings|article|informal)".*?' \
                  '<span class="title" itemprop="name">(.*?).</span>' \
